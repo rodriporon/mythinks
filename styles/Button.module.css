@@ -10,6 +10,7 @@
   font-weight: 800;
   padding: 8px 24px;
   transition: opasity 0.3s ease;
+  user-select: none;
 }
 
 .button svg {
@@ -17,4 +18,9 @@
 }
 .button:hover {
   opacity: 0.7;
+}
+
+.button[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
 }

@@ -2,15 +2,16 @@ import styles from "../../styles/HomePage.module.css"
 import stylesHome from "../../styles/Home.module.css"
 import { useEffect, useState } from "react"
 import Think from "../../components/Think"
+import useUser from "../../hooks/useUser"
+import { fetchLatestThinks } from "../../firebase/client"
 
 export default function HomePage() {
   const [Timeline, setTimeline] = useState([])
+  const user = useUser()
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/statuses/home_timeline")
-      .then((res) => res.json())
-      .then(setTimeline)
-  }, [])
+    user && fetchLatestThinks().then(setTimeline)
+  }, [user])
 
   return (
     <>
@@ -21,15 +22,19 @@ export default function HomePage() {
               <h2 className={styles.h2}>Inicio</h2>
             </header>
             <section className={styles.section}>
-              {Timeline.map((think) => (
-                <Think
-                  key={think.id}
-                  username={think.username}
-                  avatar={think.avatar}
-                  message={think.message}
-                  id={think.id}
-                />
-              ))}
+              {Timeline.map(
+                ({ id, userName, avatar, content, userId, createdAt }) => (
+                  <Think
+                    key={id}
+                    userName={userName}
+                    avatar={avatar}
+                    content={content}
+                    id={id}
+                    userId={userId}
+                    createdAt={createdAt}
+                  />
+                )
+              )}
             </section>
             <nav className={styles.nav}></nav>
           </div>
