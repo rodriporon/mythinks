@@ -1,20 +1,31 @@
 import Avatar from "../../components/Avatar"
 import styles from "../../styles/Think.module.css"
+import useTimeAgo from "../../hooks/useTimeAgo"
 
-export default function Think({ avatar, userName, content, createdAt, id }) {
+export default function Think({
+  avatar,
+  userName,
+  img,
+  content,
+  createdAt,
+  id,
+}) {
+  const timeago = useTimeAgo(createdAt)
+
   return (
     <>
       <article className={styles.article}>
         <div className={styles.div}>
-          <Avatar alt={styles.username} src={avatar} />
+          <Avatar alt={userName} src={avatar} />
         </div>
         <section>
           <header>
             <strong>{userName}</strong>
             <span> · </span>
-            <date className={styles.date}>{createdAt}</date>
+            <time className={styles.date}>{timeago}</time>
           </header>
           <p className={styles.p}>{content}</p>
+          {img && <img className={styles.img} src={img} />}
         </section>
       </article>
     </>

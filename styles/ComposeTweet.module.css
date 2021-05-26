@@ -1,13 +1,7 @@
-.textarea {
-  border: 0;
-  font-size: 21px;
-  width: 100%;
-  padding: 15px;
-  resize: none;
-  outline: 0;
-  min-height: 200px;
-}
-
 .div {
   padding: 15px;
+}
+
+.form {
+  padding: 10px;
 }

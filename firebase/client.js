@@ -37,10 +37,11 @@ export const loginWithGitHub = () => {
   return firebase.auth().signInWithPopup(githubProvider)
 }
 
-export const addThink = ({ avatar, content, userId, userName }) => {
+export const addThink = ({ avatar, content, img, userId, userName }) => {
   return db.collection("thinks").add({
     avatar,
     content,
+    img,
     userId,
     userName,
     createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
@@ -52,6 +53,7 @@ export const addThink = ({ avatar, content, userId, userName }) => {
 export const fetchLatestThinks = () => {
   return db
     .collection("thinks")
+    .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
       return docs.map((doc) => {
@@ -59,15 +61,17 @@ export const fetchLatestThinks = () => {
         const id = doc.id
         const { createdAt } = data
 
-        const date = new Date(createdAt.seconds * 1000)
-
-        const normalizedCreateAt = new Intl.DateTimeFormat("es-ES").format(date)
-
         return {
           ...data,
           id,
-          createdAt: normalizedCreateAt,
+          createdAt: +createdAt.toDate(),
         }
       })
     })
+}
+
+export const uploadImage = (file) => {
+  const ref = firebase.storage().ref(`/images/${file.name}`)
+  const task = ref.put(file)
+  return task
 }
