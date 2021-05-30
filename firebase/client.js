@@ -50,25 +50,38 @@ export const addThink = ({ avatar, content, img, userId, userName }) => {
   })
 }
 
-export const fetchLatestThinks = () => {
+const mapThinkFromFirebaseToThinkObject = (doc) => {
+  const data = doc.data()
+  const id = doc.id
+  const { createdAt } = data
+
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate(),
+  }
+}
+
+export const listenLatestThinks = (callback) => {
+  return db
+    .collection("thinks")
+    .orderBy("createdAt", "desc")
+    .limit(20)
+    .onSnapshot(({ docs }) => {
+      const newThinks = docs.map(mapThinkFromFirebaseToThinkObject)
+      callback(newThinks)
+    })
+}
+
+/* export const fetchLatestThinks = () => {
   return db
     .collection("thinks")
     .orderBy("createdAt", "desc")
     .get()
     .then(({ docs }) => {
-      return docs.map((doc) => {
-        const data = doc.data()
-        const id = doc.id
-        const { createdAt } = data
-
-        return {
-          ...data,
-          id,
-          createdAt: +createdAt.toDate(),
-        }
-      })
+      return docs.map(mapThinkFromFirebaseToThinkObject)
     })
-}
+} */
 
 export const uploadImage = (file) => {
   const ref = firebase.storage().ref(`/images/${file.name}`)

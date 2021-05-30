@@ -55,6 +55,7 @@ export default function ComposeTweet() {
       content: message,
       userId: user.uid,
       userName: user.username,
+      img: imgURL,
     })
       .then(() => {
         router.push("/home")
@@ -121,12 +122,12 @@ export default function ComposeTweet() {
         }
 
         .form-container {
-          display: flex;
           align-items: flex-start;
+          display: flex;
         }
 
         .avatar-container {
-          margin-top: 20px;
+          padding-top: 20px;
           padding-left: 10px;
         }
         textarea {
@@ -134,11 +135,13 @@ export default function ComposeTweet() {
             ? "3px dashed #09f"
             : "3px solid transparent"};
           font-size: 18px;
-          width: 100%;
+          width: 150%;
           padding: 15px;
           resize: none;
           outline: 0;
           min-height: 200px;
+          border-radius: 10px;
+          position: relative;
         }
         button {
           background: rgba(0, 0, 0, 0.3);

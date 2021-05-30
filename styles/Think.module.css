@@ -4,6 +4,11 @@
   border-bottom: 2px solid #eee;
 }
 
+.article:hover {
+  background: #f5f8fa;
+  cursor: pointer;
+}
+
 .div {
   padding-right: 10px;
 }

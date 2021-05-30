@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react"
+import { formatDate } from "./useDateTimeFormat"
+
+const isRelativeTimeFormatSupported =
+  typeof Intl !== "undefined" && Intl.DateTimeFormat
 
 const DATE_UNITS = [
   ["day", 86400],
@@ -23,15 +27,20 @@ export default function useTimeAgo(timestamp) {
   const [timeago, setTimeago] = useState(() => getDateDiffs(timestamp))
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const newTimeago = getDateDiffs(timestamp)
-      setTimeago(newTimeago)
-    }, 10000)
+    if (isRelativeTimeFormatSupported) {
+      const interval = setInterval(() => {
+        const newTimeago = getDateDiffs(timestamp)
+        setTimeago(newTimeago)
+      }, 10000)
 
-    return () => clearInterval(interval)
+      return () => clearInterval(interval)
+    }
   }, [timestamp])
 
-  const rtf = new Intl.RelativeTimeFormat(navigator.language, {
+  if (!isRelativeTimeFormatSupported) {
+    return formatDate(timestamp)
+  }
+  const rtf = new Intl.RelativeTimeFormat("ES-es", {
     style: "short",
   })
 

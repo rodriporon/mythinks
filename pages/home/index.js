@@ -2,7 +2,7 @@ import styles from "../../styles/HomePage.module.css"
 import { useEffect, useState } from "react"
 import Think from "../../components/Think"
 import useUser from "../../hooks/useUser"
-import { fetchLatestThinks } from "../../firebase/client"
+import { listenLatestThinks } from "../../firebase/client"
 import Link from "next/link"
 import Create from "../../components/Icons/Create"
 import Home from "../../components/Icons/Home"
@@ -14,7 +14,13 @@ export default function HomePage() {
   const user = useUser()
 
   useEffect(() => {
-    user && fetchLatestThinks().then(setTimeline)
+    let unsuscribe
+    if (user) {
+      unsuscribe = listenLatestThinks((newThinks) => {
+        setTimeline(newThinks)
+      })
+    }
+    return () => unsuscribe && unsuscribe()
   }, [user])
 
   return (
